@@ -40,7 +40,7 @@ if [[ ! -z "$MONERO_TX_PROXY" ]]; then
 fi
 
 if [[ ! -z "$MONERO_ZMQ_PUB" ]]; then
-    args+=(--zmq-pub "$ZMQ_PUB")
+    args+=(--zmq-pub "$MONERO_ZMQ_PUB")
 fi
 
 if [ "$MONERO_ADDITIONAL_ARGS" ]; then
