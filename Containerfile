@@ -29,7 +29,7 @@ ARG hashes_url=https://www.getmonero.org/downloads/$hashes_file
 ARG install_dir=/usr/local/bin
 ARG data_dir=/var/lib/monero
 
-FROM fedora-minimal:$fedora_tag as base
+FROM registry.fedoraproject.org/fedora-minimal:$fedora_tag as base
 
 
 ########################################################################################################################

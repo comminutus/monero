@@ -68,7 +68,7 @@ The container exposes the following ports:
 ## Dependencies
 | Name                                         | Version   |
 | -------------------------------------------- | --------- |
-| [Fedora](https://hub.docker.com/_/fedora) | v39 |
+| [Fedora](https://registry.fedoraproject.org/repo/fedora-minimal/tags/) | v39 |
 | [Monero](https://www.getmonero.org/)         | v0.18.3.3 |
 
 ## License
