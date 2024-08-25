@@ -7,6 +7,8 @@
 ## Description
 This is a [Monero](https://www.getmonero.org/) container image built using the binaries distributed by the Monero team.  The container image runs `monerod`.
 
+Since the distributed Monero binary uses dynamically-linked glibc, it uses the [Chainguard glibc-dynamic](https://images.chainguard.dev/directory/image/glibc-dynamic/versions) base image.  This is a distroless container, and as such has very little attack surfaces.  It also has no shell, so it's not possible to execute a shell into the container.
+
 ## Getting Started
 ```
 podman pull ghcr.io/comminutus/monero
@@ -14,42 +16,18 @@ podman run -it --rm ghcr.io/comminutus/monero
 ```
 
 ## Usage
+Node that the container image does not set any other command line options other than `--data-dir` (see "Volumes" below).  If you need to run this non-interactively, use the `--non-interactive` command line option (i.e. `podman run -d ghcr.io/comminutus/monero --non-interactive`).
 
-### Environment Variables and Options
-Some configuration options from `moderod` can be set directly via environment variables.  They correspond to the '`--`'
-options that `monerod` supports.  For help regarding a specific option, consult `monerod --help`
+For a full list of command line options, consult the [Monero documentation](https://www.getmonero.org/).
 
-**Supported Environment Variables:**
-| Environment Variable                        | `monerod` option                    | Default Value                                         |
-| ------------------------------------------- | ----------------------------------- | ----------------------------------------------------- |
-| `MONERO_DATA_DIR`                         | `--data-dir`                          | _/var/lib/monero_                                     |
-| `MONERO_LOG_LEVEL`                        | `--log-level`                         | _0_                                                   |
-| `MONERO_DISABLE_DNS_CHECKPOINTS`          | `--disable-dns-checkpoints`           |                                                       |
-| `MONERO_ENABLE_DNS_BLOCKLIST`             | `--enable-dns-blocklist`              | _on, to turn off, set `MONERO_ENABLE_DNS_BLOCKLIST=`_ |
-| `MONERO_NON_INTERACTIVE`                  | `--non-interactive`                   |                                                       |
-| `MONERO_P2P_BIND_IP`                      | `--p2p-bind-ip`                       | _0.0.0.0_                                             |
-| `MONERO_P2P_BIND_PORT`                    | `--p2p-bind-port`                     | _18080_                                               |
-| `MONERO_P2P_EXTERNAL_PORT`                | `--p2p-external-port`                 | _0_                                                   |
-| `MONERO_RPC_BIND_IP`                      | `--rpc-bind-ip`                       | _0.0.0.0_                                             |
-| `MONERO_RPC_BIND_PORT`                    | `--rpc-bind-port`                     | _18081_                                               |
-| `MONERO_RPC_RESTRICTED_BIND_IP`           | `--rpc-restricted-bind-ip`            |                                                       |
-| `MONERO_RPC_RESTRICTED_BIND_IPV6_ADDRESS` | `--rpc-restricted-bind-ipv6-address`  |                                                       |
-| `MONERO_TX_PROXY`                         | `--tx-proxy`                          |                                                       |
-| `MONERO_ZMQ_PUB`                          | `--zmq-pub`                           |                                                       |
+### Persistent Data
+The container's persistent data, including configuration and blockchain data are stored at _/var/lib/monero_.
 
-If there are other options you'd like to set that don't correspond to an environment variable, you can set `MONERO_ADDITIONAL_ARGS` to
-include other arguments.  For example: `MONERO_ADDITIONAL_ARGS=--disable-dns-checkpoints --disable-rpc-ban`.
-
-### Volumes
-By default, the container's persistent data, including configuration and blockchain data are stored at _/var/lib/monero_.
-You can change this by setting the `MONERO_DATA_DIR` environment variable.
-
-This can be useful if you're running the container image with Docker, Kubernetes, OpenShift, etc.  Mount your volumes at
-_/var/lib/monero_ or wherever you choose to set `MONERO_DATA_DIR` to.
+When running the container image with Docker, Kubernetes, OpenShift, etc., mount your volumes at
+_/var/lib/monero_.
 
 ### User/Group
-The container uses a user named _monero_ with a UID of _10000_, with a group that matches the same.  If you'd like to change this, rebuild
-the container and set the `uid` build argument.
+Because the container uses Chainguard's image as a base, the `monerod` process is run as non-root.
 
 ### Ports
 The container exposes the following ports:
@@ -68,8 +46,8 @@ The container exposes the following ports:
 ## Dependencies
 | Name                                         | Version   |
 | -------------------------------------------- | --------- |
-| [Fedora](https://registry.fedoraproject.org/repo/fedora-minimal/tags/) | v39 |
-| [Monero](https://www.getmonero.org/)         | v0.18.3.3 |
+| [Chainguard glibc-dynamic](https://images.chainguard.dev/directory/image/glibc-dynamic/versions) | latest |
+| [Monero](https://www.getmonero.org/)         | v0.18.3.4 |
 
 ## License
 The container image portion of this project is licensed under the GNU Affero General Public License v3.0 - see the
@@ -77,3 +55,5 @@ The container image portion of this project is licensed under the GNU Affero Gen
 
 The Monero software binaries included with this container image inherit Monero's license - see the 
 [MONERO LICENSE](MONERO_LICENSE) file for details.
+
+The Chainguard _glibc-dynamic_ base container image is licensed under the [Apache 2.0 License](https://github.com/chainguard-images/images/blob/main/LICENSE)

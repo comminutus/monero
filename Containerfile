@@ -22,6 +22,7 @@ ARG ports='18080 18081 18082 18083 28080 28081 28082 28083 38080 38081 38082 380
 # Defaults
 ARG build_dir=/tmp/build
 ARG dist_dir=$build_dir/dist
+ARG doc_dir=$build_dir/doc
 ARG hashes_file=hashes.txt
 ARG hashes_url=https://www.getmonero.org/downloads/$hashes_file
 ARG data_dir=/var/lib/monero
@@ -31,13 +32,13 @@ ARG data_dir=/var/lib/monero
 # Build Image
 ########################################################################################################################
 FROM cgr.dev/chainguard/wolfi-base:latest as build
-ARG build_dir dist_dir hashes_file hashes_url monero_version
+ARG build_dir doc_dir dist_dir hashes_file hashes_url monero_version
 
 # Copy assets
 WORKDIR $build_dir
 COPY binaryfate.asc .
-COPY LICENSE
-COPY MONERO_LICENSE
+COPY LICENSE $doc_dir
+COPY MONERO_LICENSE $doc_dir
 
 ARG build_packages='gpg wget'
 RUN apk add $build_packages
@@ -72,6 +73,7 @@ ARG dist_dir ports
 
 # Install binaries
 COPY --from=build $dist_dir /usr/local/bin
+COPY --from=build $doc_dir /usr/local/share/doc/monero
 
 # Setup a volume for blockchain
 VOLUME /var/lib/monero
