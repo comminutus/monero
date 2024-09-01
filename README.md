@@ -16,7 +16,7 @@ podman run -it --rm ghcr.io/comminutus/monero
 ```
 
 ## Usage
-Note that the container image does not set any other command line options other than `--data-dir` (see "Volumes" below).  If you need to run this non-interactively, use the `--non-interactive` command line option (i.e. `podman run -d ghcr.io/comminutus/monero --non-interactive`).
+Note that the container image does not set any other command line options other than `--data-dir` (see "Volumes" below).  If you need to run `monerod` non-interactively, use the `--non-interactive` command line option (i.e. `podman run -d ghcr.io/comminutus/monero --non-interactive`).
 
 For a full list of command line options, consult the [Monero documentation](https://www.getmonero.org/).
 
