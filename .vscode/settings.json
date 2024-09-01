@@ -13,6 +13,7 @@
         "moderod",
         "monero",
         "monerod",
+        "nonroot",
         "Rekor",
         "sarif",
         "sigstore",
