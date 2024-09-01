@@ -23,11 +23,10 @@ For a full list of command line options, consult the [Monero documentation](http
 ### Persistent Data
 The container's persistent data, including configuration and blockchain data are stored at _/var/lib/monero_.
 
-When running the container image with Docker, Kubernetes, OpenShift, etc., mount your volumes at
-_/var/lib/monero_.
+When running the container image with Docker, Kubernetes, OpenShift, etc., mount your volumes at _/var/lib/monero_.
 
 ### User/Group
-Because the container uses Chainguard's image as a base, the `monerod` process is run as non-root. The username and group name the process runs as is `nonroot`.  The UID and GID are set to 65532.
+Because the container uses Chainguard's image as a base, the `monerod` process is run as a non-root user. The username and group name is `nonroot`.  The UID and GID are set to _65532_.
 
 ### Ports
 The container exposes the following ports:
