@@ -1,5 +1,5 @@
 ########################################################################################################################
-# Configuration / Base Image
+# Configuration
 ########################################################################################################################
 # Core Config
 ARG monero_version=0.18.3.4
@@ -25,7 +25,6 @@ ARG dist_dir=$build_dir/dist
 ARG doc_dir=$build_dir/doc
 ARG hashes_file=hashes.txt
 ARG hashes_url=https://www.getmonero.org/downloads/$hashes_file
-ARG data_dir=/var/lib/monero
 
 
 ########################################################################################################################
@@ -73,7 +72,7 @@ ARG dist_dir ports
 
 # Install binaries
 COPY --from=build $dist_dir /usr/local/bin
-COPY --from=build $doc_dir /usr/local/share/doc/monero
+COPY --from=build $doc_dir /usr/local/share/licenses/monero
 
 # Setup a volume for blockchain
 VOLUME /var/lib/monero
@@ -83,3 +82,4 @@ EXPOSE $ports
 
 # Run entrypoint script
 ENTRYPOINT ["/usr/local/bin/monerod", "--data-dir", "/var/lib/monero"]
+CMD ["--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=18080", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=18081", "--non-interactive", "--confirm-external-bind"]

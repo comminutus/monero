@@ -27,7 +27,7 @@ When running the container image with Docker, Kubernetes, OpenShift, etc., mount
 _/var/lib/monero_.
 
 ### User/Group
-Because the container uses Chainguard's image as a base, the `monerod` process is run as non-root.
+Because the container uses Chainguard's image as a base, the `monerod` process is run as non-root. The username and group name the process runs as is `nonroot`.  The UID and GID are set to 65532.
 
 ### Ports
 The container exposes the following ports:
