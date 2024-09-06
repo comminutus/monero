@@ -22,7 +22,7 @@ ARG ports='18080 18081 18082 18083 28080 28081 28082 28083 38080 38081 38082 380
 # Defaults
 ARG build_dir=/tmp/build
 ARG dist_dir=$build_dir/dist
-ARG doc_dir=$build_dir/doc
+ARG license_dir=$build_dir/licenses
 ARG hashes_file=hashes.txt
 ARG hashes_url=https://www.getmonero.org/downloads/$hashes_file
 
@@ -31,13 +31,13 @@ ARG hashes_url=https://www.getmonero.org/downloads/$hashes_file
 # Build Image
 ########################################################################################################################
 FROM cgr.dev/chainguard/wolfi-base:latest as build
-ARG build_dir doc_dir dist_dir hashes_file hashes_url monero_version
+ARG build_dir dist_dir hashes_file hashes_url license_dir monero_version
 
 # Copy assets
 WORKDIR $build_dir
 COPY binaryfate.asc .
-COPY LICENSE $doc_dir
-COPY MONERO_LICENSE $doc_dir
+COPY LICENSE $license_dir
+COPY MONERO_LICENSE $license_dir
 
 ARG build_packages='gpg wget'
 RUN apk add $build_packages
@@ -68,11 +68,11 @@ RUN mkdir -p "$dist_dir" && tar -xj --strip-components 1 -C "$dist_dir" -f "$(ca
 # Final image
 ########################################################################################################################
 FROM cgr.dev/chainguard/glibc-dynamic as final
-ARG dist_dir ports
+ARG dist_dir license_dir ports
 
 # Install binaries
 COPY --from=build $dist_dir /usr/local/bin
-COPY --from=build $doc_dir /usr/local/share/licenses/monero
+COPY --from=build $license_dir /usr/local/share/licenses/monero
 
 # Setup a volume for blockchain
 VOLUME /var/lib/monero
@@ -80,6 +80,6 @@ VOLUME /var/lib/monero
 # Expose ports
 EXPOSE $ports
 
-# Run entrypoint script
+# Run entrypoint
 ENTRYPOINT ["/usr/local/bin/monerod", "--data-dir", "/var/lib/monero"]
 CMD ["--p2p-bind-ip=0.0.0.0", "--p2p-bind-port=18080", "--rpc-bind-ip=0.0.0.0", "--rpc-bind-port=18081", "--non-interactive", "--confirm-external-bind"]
